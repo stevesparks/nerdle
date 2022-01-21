@@ -68,10 +68,13 @@ function App() {
 
       if (winningWord) {
         return setIsGameWon(true)
+          incrementIndex()
+          return
       }
 
       if (guesses.length === 5) {
         setIsGameLost(true)
+          incrementIndex()
         return setTimeout(() => {
           setIsGameLost(false)
         }, 2000)

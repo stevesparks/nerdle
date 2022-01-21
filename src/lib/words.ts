@@ -46,6 +46,9 @@ const gameIndexKey = 'gameIndex'
 export const saveIndexToLocalStorage = (index: number) => {
   localStorage.setItem(gameIndexKey, index.toString())
 }
+export const incrementIndex = (index: number) => {
+  saveIndexToLocalStorage(loadIndexFromLocalStorage() + 1)
+}
 
 export const loadIndexFromLocalStorage = () => {
   const state = localStorage.getItem(gameIndexKey)
