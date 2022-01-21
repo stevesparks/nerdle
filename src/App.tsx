@@ -6,11 +6,12 @@ import { Keyboard } from './components/keyboard/Keyboard'
 import { AboutModal } from './components/modals/AboutModal'
 import { InfoModal } from './components/modals/InfoModal'
 import { WinModal } from './components/modals/WinModal'
-import { isWordInWordList, isWinningWord, solution } from './lib/words'
+import { isWordInWordList, isWinningWord} from './lib/words'
 import {
   loadGameStateFromLocalStorage,
   saveGameStateToLocalStorage,
 } from './lib/localStorage'
+import useCurrentGame from './lib/useCurrentGame'
 
 function App() {
   const [currentGuess, setCurrentGuess] = useState('')
@@ -21,13 +22,14 @@ function App() {
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false)
   const [isGameLost, setIsGameLost] = useState(false)
   const [shareComplete, setShareComplete] = useState(false)
+  const {solution, solutionIndex, setSolutionIndex} = useCurrentGame();
   const [guesses, setGuesses] = useState<string[]>(() => {
     const loaded = loadGameStateFromLocalStorage()
     if (loaded?.solution !== solution) {
       return []
     }
     if (loaded.guesses.includes(solution)) {
-      setIsGameWon(true)
+      setIsGameWon(true);
     }
     return loaded.guesses
   })
@@ -52,6 +54,14 @@ function App() {
     setCurrentGuess(currentGuess.slice(0, -1))
   }
 
+  const resetForNextGame = () => {
+    setSolutionIndex(solutionIndex + 1);
+    setGuesses([]);
+    setCurrentGuess('');
+    setIsGameWon(false);
+    setIsGameLost(false);
+  }
+
   const onEnter = () => {
     if (!isWordInWordList(currentGuess)) {
       setIsWordNotFoundAlertOpen(true)
@@ -60,7 +70,7 @@ function App() {
       }, 2000)
     }
 
-    const winningWord = isWinningWord(currentGuess)
+    const winningWord = isWinningWord({word: currentGuess, solution})
 
     if (currentGuess.length === 5 && guesses.length < 6 && !isGameWon) {
       setGuesses([...guesses, currentGuess])
@@ -74,6 +84,7 @@ function App() {
         setIsGameLost(true)
         return setTimeout(() => {
           setIsGameLost(false)
+          resetForNextGame();
         }, 2000)
       }
     }
@@ -98,22 +109,28 @@ function App() {
           onClick={() => setIsInfoModalOpen(true)}
         />
       </div>
-      <Grid guesses={guesses} currentGuess={currentGuess} />
+      <Grid guesses={guesses} currentGuess={currentGuess} solution={solution} />
       <Keyboard
         onChar={onChar}
         onDelete={onDelete}
         onEnter={onEnter}
         guesses={guesses}
+        solution={solution}
       />
       <WinModal
         isOpen={isWinModalOpen}
-        handleClose={() => setIsWinModalOpen(false)}
+        handleClose={() => {
+          setIsWinModalOpen(false)
+          resetForNextGame();
+        }}
         guesses={guesses}
+        solution={solution}
         handleShare={() => {
           setIsWinModalOpen(false)
           setShareComplete(true)
           return setTimeout(() => {
             setShareComplete(false)
+            resetForNextGame();
           }, 2000)
         }}
       />
