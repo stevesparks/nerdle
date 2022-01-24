@@ -64,9 +64,10 @@ function App() {
 
   const onEnter = () => {
     if (!isWordInWordList(currentGuess)) {
-      setIsWordNotFoundAlertOpen(true)
+      setIsWordNotFoundAlertOpen(true);
       return setTimeout(() => {
-        setIsWordNotFoundAlertOpen(false)
+        setIsWordNotFoundAlertOpen(false);
+        setCurrentGuess('');
       }, 2000)
     }
 
