@@ -9,6 +9,7 @@ import { WinModal } from './components/modals/WinModal'
 import { isWordInWordList, isWinningWord} from './lib/words'
 import {
   loadGameStateFromLocalStorage,
+  saveFinalGameStatesToLocalStorage,
   saveGameStateToLocalStorage,
 } from './lib/localStorage'
 import useCurrentGame from './lib/useCurrentGame'
@@ -36,7 +37,7 @@ function App() {
 
   useEffect(() => {
     saveGameStateToLocalStorage({ guesses, solution })
-  }, [guesses])
+  }, [guesses, solution])
 
   useEffect(() => {
     if (isGameWon) {
@@ -55,6 +56,11 @@ function App() {
   }
 
   const resetForNextGame = () => {
+    const gameData = {
+      guesses: guesses.length,
+      won: isGameWon
+    }
+    saveFinalGameStatesToLocalStorage(gameData);
     setSolutionIndex(solutionIndex + 1);
     setGuesses([]);
     setCurrentGuess('');
