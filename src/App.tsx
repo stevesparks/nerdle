@@ -14,6 +14,25 @@ import {
 } from './lib/localStorage'
 import useCurrentGame from './lib/useCurrentGame'
 
+const images = [
+    "bbq-attorney.png",
+    "bbq-loanshark.png",
+    "bbq-taxidermy-2.png",
+    "bbq-llamabarn.png",
+    "bbq-taxidermy-2.png",
+]
+const shuffledImages = images.sort((a,b) => 0.5 - Math.random())
+var imageIndex = 0
+const banner = document.getElementById("banner") as HTMLImageElement
+setInterval(() => {
+    banner.src = shuffledImages[imageIndex]
+    if(imageIndex == shuffledImages.length-1) {
+        imageIndex = 0
+    } else {
+        imageIndex++
+    }
+}, 5000)
+
 function App() {
   const [currentGuess, setCurrentGuess] = useState('')
   const [isGameWon, setIsGameWon] = useState(false)
@@ -96,6 +115,7 @@ function App() {
       }
     }
   }
+
 
   return (
     <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
