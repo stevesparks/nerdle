@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.usernameContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+}
