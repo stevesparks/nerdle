@@ -17,18 +17,21 @@ import useUsername from './lib/useUsername'
 import { LoginModal } from './components/modals/LoginModal'
 
 const images = [
+    "elmoween.png",
     "bbq-attorney.png",
     "bbq-loanshark.png",
     "bbq-taxidermy-2.png",
+    "whoisbillmonk.gif",
     "bbq-llamabarn.png",
     "bbq-taxidermy-2.png",
+    "airdnd.png"
 ]
 const shuffledImages = images.sort((a,b) => 0.5 - Math.random())
 var imageIndex = 0
 const banner = document.getElementById("banner") as HTMLImageElement
 setInterval(() => {
     banner.src = shuffledImages[imageIndex]
-    if(imageIndex == shuffledImages.length-1) {
+    if(imageIndex === shuffledImages.length-1) {
         imageIndex = 0
     } else {
         imageIndex++
@@ -93,7 +96,7 @@ function App() {
   }
 
   const onEnter = () => {
-    if (!isWordInWordList(currentGuess)) {
+    if (!isWordInWordList(currentGuess) && !isLoginModalOpen) {
       setIsWordNotFoundAlertOpen(true);
       return setTimeout(() => {
         setIsWordNotFoundAlertOpen(false);
