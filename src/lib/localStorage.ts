@@ -1,3 +1,5 @@
+import { writeUserData } from "../utils/firebase";
+
 const gameStateKey = 'gameState';
 const gameStatsKey = 'gameStats';
 
@@ -8,7 +10,8 @@ type StoredGameState = {
 
 type GameData = {
   guesses: number,
-  won: boolean
+  won: boolean,
+  username: string
 }
 
 type FinalGameData = {
@@ -57,6 +60,10 @@ export const saveFinalGameStatesToLocalStorage = (gameData: GameData) => {
     won: gameData.won ? won + 1 : won,
     lost: !gameData.won ? lost + 1 : lost,
     totalGames: totalGames + 1
+  }
+  const {username} = gameData;
+  if (username) {
+    writeUserData(username, currentGameStats)
   }
   localStorage.setItem(gameStatsKey, JSON.stringify(currentGameStats))
 }

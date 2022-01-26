@@ -13,6 +13,8 @@ import {
   saveGameStateToLocalStorage,
 } from './lib/localStorage'
 import useCurrentGame from './lib/useCurrentGame'
+import useUsername from './lib/useUsername'
+import { LoginModal } from './components/modals/LoginModal'
 
 const images = [
     "bbq-attorney.png",
@@ -34,11 +36,13 @@ setInterval(() => {
 }, 5000)
 
 function App() {
+  const {username, setUsername} = useUsername();
   const [currentGuess, setCurrentGuess] = useState('')
   const [isGameWon, setIsGameWon] = useState(false)
   const [isWinModalOpen, setIsWinModalOpen] = useState(false)
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false)
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
   const [isWordNotFoundAlertOpen, setIsWordNotFoundAlertOpen] = useState(false)
   const [isGameLost, setIsGameLost] = useState(false)
   const [shareComplete, setShareComplete] = useState(false)
@@ -65,7 +69,7 @@ function App() {
   }, [isGameWon])
 
   const onChar = (value: string) => {
-    if (currentGuess.length < 5 && guesses.length < 6) {
+    if (currentGuess.length < 5 && guesses.length < 6 && !isLoginModalOpen) {
       setCurrentGuess(`${currentGuess}${value}`)
     }
   }
@@ -77,7 +81,8 @@ function App() {
   const resetForNextGame = () => {
     const gameData = {
       guesses: guesses.length,
-      won: isGameWon
+      won: isGameWon,
+      username
     }
     saveFinalGameStatesToLocalStorage(gameData);
     setSolutionIndex(solutionIndex + 1);
@@ -116,7 +121,6 @@ function App() {
     }
   }
 
-
   return (
     <div className="py-8 max-w-7xl mx-auto sm:px-6 lg:px-8">
       <Alert message="Word not found" isOpen={isWordNotFoundAlertOpen} />
@@ -129,8 +133,11 @@ function App() {
         isOpen={shareComplete}
         variant="success"
       />
+      <div className="usernameContainer">
+      <button onClick={() => setIsLoginModalOpen(true)}>{username ? `Welcome, ${username}` : `Login`}</button>
+      </div>
       <div className="flex w-80 mx-auto items-center mb-8">
-        <h1 className="text-xl grow font-bold">Not Wordle</h1>
+        <h1 className="text-xl grow font-bold">Nerdle</h1>
         <InformationCircleIcon
           className="h-6 w-6 cursor-pointer"
           onClick={() => setIsInfoModalOpen(true)}
@@ -168,6 +175,12 @@ function App() {
       <AboutModal
         isOpen={isAboutModalOpen}
         handleClose={() => setIsAboutModalOpen(false)}
+      />
+
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        handleClose={() => setIsLoginModalOpen(false)}
+        handleClick={(value) => setUsername(value)}
       />
 
       <button

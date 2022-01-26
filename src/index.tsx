@@ -1,12 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import Leaderboard from './Leaderboard';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route path="scores/:username" element={<Leaderboard />} />
+        <Route path="scores" element={<Leaderboard />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 )
