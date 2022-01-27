@@ -20,6 +20,7 @@ const images = [
     "elmoween.png",
     "bbq-attorney.png",
     "bbq-loanshark.png",
+    "not-a-cat.png",
     "bbq-taxidermy-2.png",
     "whoisbillmonk.gif",
     "bbq-llamabarn.png",
@@ -140,7 +141,8 @@ function App() {
       <button onClick={() => setIsLoginModalOpen(true)}>{username ? `Welcome, ${username}` : `Login`}</button>
       </div>
       <div className="flex w-80 mx-auto items-center mb-8">
-        <h1 className="text-xl grow font-bold">Nerdle</h1>
+          <h1 className="text-xl grow font-bold">Nerdle</h1>
+          <h3 className="font-bold">Speed round Wordle</h3>
         <InformationCircleIcon
           className="h-6 w-6 cursor-pointer"
           onClick={() => setIsInfoModalOpen(true)}
